@@ -5,6 +5,7 @@ import { FAQData } from '@/data/faq';
 import Title from '../Title';
 import {  Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 
 const FAQSection = () => {
   const [openId, setOpenId] = useState<string | null>('1');
@@ -127,12 +128,12 @@ const FAQSection = () => {
           <p className="text-muted-foreground mb-8 text-sm sm:text-base font-inter max-w-lg mx-auto relative z-10">
             Our support matrix is online. Reach out to the core team to get your queries resolved immediately.
           </p>
-          <a
-            href="#contact"
+          <Link
+            href="/contact"
             className="inline-flex items-center justify-center px-10 py-4 bg-primary/10 border border-primary text-primary font-kodeMono font-bold tracking-widest uppercase rounded-lg hover:bg-primary hover:text-background transition-all duration-500 shadow-[0_0_20px_rgba(184,92,56,0.2)] hover:shadow-[0_0_30px_rgba(184,92,56,0.5)] text-sm sm:text-base cursor-pointer relative z-10 hover-target"
           >
             Initiate Contact
-          </a>
+          </Link>
         </div>
       </div>
     </section>

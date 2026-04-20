@@ -4,13 +4,15 @@ import Title from "../Title";
 import { sponsorData } from "@/data/sponsor";
 
 const SponsorSection: React.FC = () => {
-  const featuredPartners = sponsorData.filter(
-    (partner) =>
-      partner.role === "Title Sponsor" || partner.role === "Hospitality Partner",
-  );
+  const featuredRoles = ["Title Sponsor", "Hospitality Partner"];
+
+  const featuredPartners = featuredRoles
+    .map((role) => sponsorData.find((partner) => partner.role === role))
+    .filter((partner): partner is (typeof sponsorData)[number] => Boolean(partner));
+
   const supportingPartners = sponsorData.filter(
     (partner) =>
-      partner.role !== "Title Sponsor" && partner.role !== "Hospitality Partner",
+      !featuredRoles.includes(partner.role),
   );
 
   return (

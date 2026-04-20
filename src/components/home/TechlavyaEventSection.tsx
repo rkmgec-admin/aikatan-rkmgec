@@ -10,7 +10,7 @@ const EventCard = dynamic(() => import("@/components/EventCard"), {
   ssr: false,
 });
 
-const TechlavyaEventSection: React.FC = () => {
+const AikatanEventSection: React.FC = () => {
   const [flippedCardId, setFlippedCardId] = useState<string | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -26,7 +26,7 @@ const TechlavyaEventSection: React.FC = () => {
 
   return (
     <Container
-      id="techlavya"
+      id="aikatan"
       title="Cultural Showcases"
       titleClassName="from-accent to-highlight"
     >
@@ -130,4 +130,4 @@ const TechlavyaEventSection: React.FC = () => {
   );
 };
 
-export default TechlavyaEventSection;
+export default AikatanEventSection;
