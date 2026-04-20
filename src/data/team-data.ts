@@ -53,6 +53,14 @@ export const teamMembers: TeamMember[] = [
     "twitter": "",
     "facebook": "",
     "linkedin": ""
+  },{
+    "name": "Gouri Shankar Mahato",
+    "role": "Social Media Head",
+    "image": "/team/29.jpeg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
   },
   {
     "name": "Debajit Ghosh",
@@ -153,15 +161,7 @@ export const teamMembers: TeamMember[] = [
     "facebook": "",
     "linkedin": ""
   },
-  {
-    "name": "Gouri Shankar Mahato",
-    "role": "",
-    "image": "/team/29.jpeg",
-    "instagram": "",
-    "twitter": "",
-    "facebook": "",
-    "linkedin": ""
-  },
+  
   {
     "name": "Abantika Das",
     "role": "Cultural Co head",

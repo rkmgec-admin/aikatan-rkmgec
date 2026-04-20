@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
                                 <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full group-hover:bg-primary/30 transition-colors duration-500" />
                                 {/* <Image
                                     src={'/footer-img.png'}
-                                    alt='Techlavya Logo'
+                                    alt='aikatan Logo'
                                     width={220}
                                     height={70}
                                     className='relative z-10 brightness-110 drop-shadow-[0_0_15px_rgba(213,206,163,0.3)] group-hover:drop-shadow-[0_0_25px_rgba(213,206,163,0.5)] transition-all duration-500'

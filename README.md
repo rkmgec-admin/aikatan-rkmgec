@@ -1,10 +1,10 @@
-# Techlavya
+# aikatan
 
-Techlavya is the official **Tech Fest website** of **Ramkrishna Mahato Government Engineering College**. This platform showcases the latest events, competitions, and workshops organized as part of the fest.
+aikatan is the official **Tech Fest website** of **Ramkrishna Mahato Government Engineering College**. This platform showcases the latest events, competitions, and workshops organized as part of the fest.
 
 ## 🚀 Visit Our Website
 
-[![Visit our website](https://vercel.com/button)](https://techlavya-rkmgec.com/)
+[![Visit our website](https://vercel.com/button)](https://aikatan-rkmgec.com/)
 
 ## 🎨 Preview
 
@@ -27,8 +27,8 @@ To run the project locally, follow these steps:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/TechLavya/techlavya-website.git
-   cd techlavya-website
+   git clone https://github.com/aikatan/aikatan-website.git
+   cd aikatan-website
    ```
 
 2. **Install dependencies:**
@@ -45,4 +45,4 @@ To run the project locally, follow these steps:
 ## 🤝 Contributors
 We welcome contributions! Feel free to fork this repository, submit issues, or create pull requests.
 
-⭐ **Follow, contribute, and help us make Techlavya even better!** 🚀
+⭐ **Follow, contribute, and help us make aikatan even better!** 🚀
