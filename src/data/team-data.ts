@@ -126,6 +126,15 @@ export const teamMembers: TeamMember[] = [
     "linkedin": ""
   },
   {
+    "name": "Subham Kumar Burnwal",
+    "role": "Security Head",
+    "image": "/team/31.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
     "name": "Soumen Mandal",
     "role": "Vice President",
     "image": "/team/2.jpg",
@@ -161,7 +170,24 @@ export const teamMembers: TeamMember[] = [
     "facebook": "",
     "linkedin": ""
   },
-  
+  {
+    "name": "Koushik Mandal",
+    "role": "Social Media Co head",
+    "image": "/team/26.jpeg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Kamlesh Mahato",
+    "role": "Social Media Co head",
+    "image": "/team/32.jpeg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
   {
     "name": "Abantika Das",
     "role": "Cultural Co head",
@@ -202,6 +228,15 @@ export const teamMembers: TeamMember[] = [
     "name": "Sisir Roy",
     "role": "Sponsorship Co head",
     "image": "/team/18.jpeg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Bushra Bano",
+    "role": "Sponsorship Co head",
+    "image": "/team/28.jpg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
