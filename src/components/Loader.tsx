@@ -57,6 +57,8 @@ const GoldDust = memo(({ count, lite }: GoldDustProps) => {
   );
 });
 
+GoldDust.displayName = "GoldDust";
+
 const EtherealLoomLoader = ({ finishLoading }: LoaderProps) => {
   const prefersReducedMotion = useReducedMotion();
   const [progress, setProgress] = useState(0);

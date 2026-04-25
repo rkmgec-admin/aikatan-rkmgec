@@ -9,7 +9,6 @@ const ETicketSection = () => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const [enableTilt, setEnableTilt] = useState(false);
-  const [showComingSoon, setShowComingSoon] = useState(false);
   const [currentPassIndex, setCurrentPassIndex] = useState(0);
   const ticketFormUrl = "https://forms.gle/JdWc6cryAi2GkWcN8";
 
@@ -187,10 +186,8 @@ const ETicketSection = () => {
                   onClick={handleBuyTicket}
                   className="w-full md:w-auto px-8 h-12 md:h-14 bg-fest-pink/10 hover:bg-fest-pink/20 border border-fest-pink text-fest-pink font-outfit font-bold text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2 group shadow-[0_0_15px_rgba(227,74,123,0.15)] hover:shadow-[0_0_25px_rgba(227,74,123,0.3)] backdrop-blur-sm rounded-lg"
                 >
-                  {showComingSoon ? "Coming Soon!" : "Secure Your Pass"}
-                  {!showComingSoon && (
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  )}
+                  Secure Your Pass
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </div>
             </div>
