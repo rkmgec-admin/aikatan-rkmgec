@@ -1,130 +1,152 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { memo, useEffect, useMemo, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 interface LoaderProps {
   finishLoading: () => void;
 }
 
 // --- Faster Floating Gold Dust Particles ---
-const GoldDust = () => {
+interface GoldDustProps {
+  count: number;
+  lite: boolean;
+}
+
+const GoldDust = memo(({ count, lite }: GoldDustProps) => {
+  const particles = useMemo(
+    () =>
+      Array.from({ length: count }, () => ({
+        x: Math.random() * 100,
+        duration: (lite ? 4 : 3) + Math.random() * (lite ? 3 : 4),
+        delay: Math.random() * (lite ? 2 : 3),
+        size: (lite ? 1.5 : 2) + Math.random() * (lite ? 2 : 3),
+        drift: Math.random() * (lite ? 16 : 40) - (lite ? 8 : 20),
+      })),
+    [count, lite]
+  );
+
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-      {[...Array(15)].map((_, i) => {
-        const randomX = Math.random() * 100;
-        // Sped up the particle float duration
-        const randomDuration = 3 + Math.random() * 4; 
-        const randomDelay = Math.random() * 3;
-        const randomSize = 2 + Math.random() * 3;
-
+      {particles.map((particle, i) => {
         return (
           <motion.div
             key={i}
-            className="absolute rounded-full bg-[#FAD961] blur-[1px]"
+            className={`absolute rounded-full bg-[#FAD961] ${lite ? "" : "blur-[1px]"}`}
             style={{
-              width: randomSize,
-              height: randomSize,
-              left: `${randomX}%`,
+              width: particle.size,
+              height: particle.size,
+              left: `${particle.x}%`,
               bottom: "-10%",
             }}
             animate={{
               y: ["0vh", "-120vh"],
-              x: [0, Math.random() * 40 - 20, 0],
-              opacity: [0, 0.8, 0],
+              x: lite ? [0, particle.drift] : [0, particle.drift, 0],
+              opacity: lite ? [0, 0.55, 0] : [0, 0.8, 0],
             }}
             transition={{
-              duration: randomDuration,
-              delay: randomDelay,
+              duration: particle.duration,
+              delay: particle.delay,
               repeat: Infinity,
-              ease: "easeInOut",
+              ease: "linear",
             }}
           />
         );
       })}
     </div>
   );
-};
+});
 
 const EtherealLoomLoader = ({ finishLoading }: LoaderProps) => {
+  const prefersReducedMotion = useReducedMotion();
   const [progress, setProgress] = useState(0);
-  const [smoothProgress, setSmoothProgress] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
+  const [isLiteMode, setIsLiteMode] = useState(false);
 
   useEffect(() => {
+    const nav = navigator as Navigator & { deviceMemory?: number };
+    const lowCpu = (nav.hardwareConcurrency ?? 8) <= 4;
+    const lowMemory = (nav.deviceMemory ?? 8) <= 4;
+    const smallViewport = window.innerWidth <= 768;
+    setIsLiteMode(prefersReducedMotion || lowCpu || lowMemory || smallViewport);
+  }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    let exitTimeout: ReturnType<typeof setTimeout> | undefined;
+    let finishTimeout: ReturnType<typeof setTimeout> | undefined;
+
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          // Snappier exit sequence
-          setTimeout(() => setIsExiting(true), 500); 
-          setTimeout(finishLoading, 1300); 
+          exitTimeout = setTimeout(() => setIsExiting(true), isLiteMode ? 250 : 500);
+          finishTimeout = setTimeout(finishLoading, isLiteMode ? 850 : 1300);
           return 100;
         }
-        // Much faster loading curve for higher engagement
-        const increment = prev > 85 ? 0.8 : prev > 40 ? 1.8 : 3.0;
+        const increment = isLiteMode
+          ? prev > 85
+            ? 1.2
+            : prev > 40
+              ? 2.2
+              : 3.4
+          : prev > 85
+            ? 0.8
+            : prev > 40
+              ? 1.8
+              : 3.0;
         return Math.min(prev + increment, 100);
       });
-    }, 30);
-    return () => clearInterval(interval);
-  }, [finishLoading]);
+    }, isLiteMode ? 70 : 40);
 
-  useEffect(() => {
-    let frameId: number;
-    const animate = () => {
-      setSmoothProgress((prev) => {
-        const delta = progress - prev;
-        if (Math.abs(delta) < 0.05) return progress;
-        // Increased interpolation multiplier for snappier visual numbers
-        return prev + delta * 0.25; 
-      });
-      frameId = requestAnimationFrame(animate);
+    return () => {
+      clearInterval(interval);
+      if (exitTimeout) clearTimeout(exitTimeout);
+      if (finishTimeout) clearTimeout(finishTimeout);
     };
-    frameId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(frameId);
-  }, [progress]);
+  }, [finishLoading, isLiteMode]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = "auto"; };
   }, []);
 
-  const progressRatio = smoothProgress / 100;
+  const progressRatio = progress / 100;
+  const particleCount = isLiteMode ? 6 : 15;
 
   return (
     <AnimatePresence>
       {!isExiting && (
         <motion.div
-          exit={{ opacity: 0, filter: "blur(20px)", scale: 1.1 }}
+          exit={{ opacity: 0, scale: 1.05, ...(isLiteMode ? {} : { filter: "blur(20px)" }) }}
           transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }} // Quicker fade out
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#070303] select-none font-sans"
         >
           {/* Deep Ambient Aura */}
           <motion.div 
             className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(198,156,56,0.12)_0%,rgba(7,3,3,1)_70%)]"
-            animate={{ scale: [1, 1.05, 1], opacity: [0.7, 1, 0.7] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} // Faster aura pulse
+            animate={isLiteMode ? { opacity: 0.85 } : { scale: [1, 1.05, 1], opacity: [0.7, 1, 0.7] }}
+            transition={isLiteMode ? { duration: 0.2 } : { duration: 4, repeat: Infinity, ease: "easeInOut" }} // Faster aura pulse
           />
           
-          <GoldDust />
+          <GoldDust count={particleCount} lite={isLiteMode} />
 
-          <div className="relative w-[450px] h-[450px] flex items-center justify-center z-10">
+          <div className="relative w-[320px] h-[320px] md:w-[450px] md:h-[450px] flex items-center justify-center z-10">
             
             {/* Pulsing Glow behind the mandala */}
             <motion.div 
-              className="absolute w-40 h-40 rounded-full bg-[#F47920] blur-[80px]"
-              animate={{ opacity: [0.15, 0.4, 0.15] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} // Faster heartbeat
+              className={`absolute w-32 h-32 md:w-40 md:h-40 rounded-full bg-[#F47920] ${isLiteMode ? "blur-[36px]" : "blur-[80px]"}`}
+              animate={isLiteMode ? { opacity: 0.2 } : { opacity: [0.15, 0.4, 0.15] }}
+              transition={isLiteMode ? { duration: 0.2 } : { duration: 2.5, repeat: Infinity, ease: "easeInOut" }} // Faster heartbeat
             />
 
-            <svg viewBox="0 0 300 300" className="w-full h-full drop-shadow-[0_0_20px_rgba(198,156,56,0.25)]">
+            <svg viewBox="0 0 300 300" className={`w-full h-full ${isLiteMode ? "" : "drop-shadow-[0_0_20px_rgba(198,156,56,0.25)]"}`}>
               <defs>
                 {/* The Shimmering Metallic Gradient */}
                 <linearGradient id="shimmerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#8A6B27" />
                   <stop offset="30%" stopColor="#FAD961">
                     {/* Sped up the metallic shimmer sweep */}
-                    <animate attributeName="offset" values="0; 1; 0" dur="2s" repeatCount="indefinite" />
+                    {!isLiteMode && <animate attributeName="offset" values="0; 1; 0" dur="2s" repeatCount="indefinite" />}
                   </stop>
                   <stop offset="70%" stopColor="#C69C38" />
                   <stop offset="100%" stopColor="#5B1229" />
@@ -142,8 +164,8 @@ const EtherealLoomLoader = ({ finishLoading }: LoaderProps) => {
               <g transform="translate(150, 150)">
                 {/* 1. Outer Orbit (Dotted & Counter-Rotating) */}
                 <motion.g 
-                  animate={{ rotate: -360 }} 
-                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }} // 2x Faster
+                  animate={isLiteMode ? undefined : { rotate: -360 }} 
+                  transition={isLiteMode ? undefined : { duration: 25, repeat: Infinity, ease: "linear" }} // 2x Faster
                 >
                   <circle r="135" fill="none" stroke="#5B1229" strokeWidth="1" strokeDasharray="4 12" opacity="0.6"/>
                   <circle r="125" fill="none" stroke="#C69C38" strokeWidth="0.5" strokeDasharray="1 6" opacity="0.4"/>
@@ -151,8 +173,8 @@ const EtherealLoomLoader = ({ finishLoading }: LoaderProps) => {
 
                 {/* 2. Middle Layer: The 12-Point Sunburst */}
                 <motion.g 
-                  animate={{ rotate: 360 }} 
-                  transition={{ duration: 35, repeat: Infinity, ease: "linear" }} // 2x+ Faster
+                  animate={isLiteMode ? undefined : { rotate: 360 }} 
+                  transition={isLiteMode ? undefined : { duration: 35, repeat: Infinity, ease: "linear" }} // 2x+ Faster
                 >
                   {[...Array(12)].map((_, i) => (
                     <motion.path
@@ -174,8 +196,8 @@ const EtherealLoomLoader = ({ finishLoading }: LoaderProps) => {
 
                 {/* 3. Core Masterpiece: The Blooming Lotus */}
                 <motion.g
-                  animate={{ scale: [1, 1.03, 1] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} // Faster Heartbeat
+                  animate={isLiteMode ? undefined : { scale: [1, 1.03, 1] }}
+                  transition={isLiteMode ? undefined : { duration: 2.5, repeat: Infinity, ease: "easeInOut" }} // Faster Heartbeat
                 >
                   {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
                     <g key={`petal-${i}`} transform={`rotate(${angle})`}>
@@ -187,7 +209,7 @@ const EtherealLoomLoader = ({ finishLoading }: LoaderProps) => {
                         initial={{ pathLength: 0 }}
                         animate={{ pathLength: Math.min(1, progressRatio * 1.5) }}
                         transition={{ duration: 0.1 }}
-                        filter="url(#glow)"
+                        filter={isLiteMode ? undefined : "url(#glow)"}
                       />
                       <motion.path
                         d="M 0 -45 C 15 -45, 20 -65, 0 -80 C -20 -65, -15 -45, 0 -45 Z"
@@ -214,22 +236,22 @@ const EtherealLoomLoader = ({ finishLoading }: LoaderProps) => {
                   strokeDasharray="264" 
                   strokeDashoffset={264 - (264 * progressRatio)}
                   transform="rotate(-90)"
-                  filter="url(#glow)"
+                  filter={isLiteMode ? undefined : "url(#glow)"}
                 />
               </g>
             </svg>
 
             {/* Typography Centered in Mandala */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <div className="absolute inset-0 hidden md:flex flex-col items-center justify-center pointer-events-none">
               <motion.div
                 className="text-[#FAD961] font-serif tracking-widest flex items-center justify-center leading-none"
                 style={{
-                  fontSize: smoothProgress >= 99 ? "2.9rem" : "2.4rem",
-                  textShadow: "0px 0px 14px rgba(250, 217, 97, 0.5)",
+                  fontSize: progress >= 99 ? "2.9rem" : "2.4rem",
+                  textShadow: isLiteMode ? "none" : "0px 0px 14px rgba(250, 217, 97, 0.5)",
                   transition: "font-size 0.5s cubic-bezier(0.25, 1, 0.5, 1)", // Faster snap to full size
                 }}
               >
-                <span className="font-light">{Math.floor(smoothProgress)}</span>
+                <span className="font-light">{Math.floor(progress)}</span>
                 <span className="text-base text-[#F47920] ml-1 opacity-90 font-sans leading-none">%</span>
               </motion.div>
             </div>
@@ -254,8 +276,8 @@ const EtherealLoomLoader = ({ finishLoading }: LoaderProps) => {
                 </span>
                 <motion.h2 
                   className="text-[#FAD961] text-2xl md:text-3xl tracking-[0.2em] font-serif uppercase font-light"
-                  animate={{ textShadow: ["0 0 8px rgba(250,217,97,0.3)", "0 0 24px rgba(250,217,97,0.8)", "0 0 8px rgba(250,217,97,0.3)"] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} // Faster text pulse
+                  animate={isLiteMode ? undefined : { textShadow: ["0 0 8px rgba(250,217,97,0.3)", "0 0 24px rgba(250,217,97,0.8)", "0 0 8px rgba(250,217,97,0.3)"] }}
+                  transition={isLiteMode ? undefined : { duration: 2.5, repeat: Infinity, ease: "easeInOut" }} // Faster text pulse
                 >
                   Gathering the Arts
                 </motion.h2>

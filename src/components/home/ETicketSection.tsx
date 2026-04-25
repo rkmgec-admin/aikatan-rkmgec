@@ -10,6 +10,19 @@ const ETicketSection = () => {
   const y = useMotionValue(0);
   const [enableTilt, setEnableTilt] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
+  const [currentPassIndex, setCurrentPassIndex] = useState(0);
+  const ticketFormUrl = "https://forms.gle/JdWc6cryAi2GkWcN8";
+
+  const passImages = [
+    {
+      src: "/event_pass_frontside.jpeg",
+      alt: "Event pass front side",
+    },
+    {
+      src: "/event_pass_backside.jpeg",
+      alt: "Event pass back side",
+    },
+  ];
 
   // Slight 3D rotation based on mouse position
   const rotateX = useTransform(y, [-100, 100], [5, -5]);
@@ -22,6 +35,14 @@ const ETicketSection = () => {
     const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
     setEnableTilt(!reducedMotion && !coarsePointer);
   }, []);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setCurrentPassIndex((prev) => (prev + 1) % passImages.length);
+    }, 2500);
+
+    return () => window.clearInterval(timer);
+  }, [passImages.length]);
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!enableTilt) return;
@@ -37,8 +58,7 @@ const ETicketSection = () => {
   };
 
   const handleBuyTicket = () => {
-    setShowComingSoon(true);
-    setTimeout(() => setShowComingSoon(false), 2000);
+    window.open(ticketFormUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -88,14 +108,22 @@ const ETicketSection = () => {
             {/* TOP SECTION: 1600x400 IMAGE BANNER */}
             {/* aspect-[4/1] guarantees the container matches your exact image dimensions */}
             <div className="relative w-full aspect-[4/1] bg-black/50 border-b border-dashed border-accent/30 [transform:translateZ(30px)]">
-              <Image
-                src="/event_pass.jpeg"
-                alt="Event pass"
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 1024px"
-                className="object-contain object-center"
-              />
+              <motion.div
+                key={passImages[currentPassIndex].src}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={passImages[currentPassIndex].src}
+                  alt={passImages[currentPassIndex].alt}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 1024px"
+                  className="object-contain object-center"
+                />
+              </motion.div>
               {/* Inner Glass border overlay */}
               <div className="absolute inset-0 border-[2px] sm:border-[3px] md:border-[4px] border-white/5 rounded-t-[1.25rem] sm:rounded-t-[1.5rem] md:rounded-t-[2rem] pointer-events-none" />
             </div>
