@@ -19,27 +19,16 @@ export const sponsorData: sponsorDataType[] = [
     note: "On-air promotion and audience reach",
   },
   {
-    role: "Jewellery Partner",
-    name: "Shyam Sundar Chandiwala",
-    note: "Jewellery partner for styling and collaboration",
-    logo: "/sponsor/9.jpeg",  
-  },
-  {
-    role: "Associate Partner",
+    role: "Food Partner",
     name: "Sorella",
-    note: "Community support and collaboration",
+    note: "Food services for event attendees",
     logo: "/sponsor/6.jpeg",
   },
-  {
-    role: "Associate Partner",
-    name: "Srabu Consultancy",
-    note: "Strategic support and engagement",
-      logo: "/sponsor/2.png",
-  },
+  
   {
     role: "Hospitality Partner",
-    name: "Sagar Raj Resort",
-    logo: "/sponsor/sagar-raj-resorts.png",
+    name: "Pearl Tree Hotels & Resorts",
+    logo: "/sponsor/4.jpeg",
     note: "Guest experience and hospitality support",
   },
   {
@@ -50,8 +39,8 @@ export const sponsorData: sponsorDataType[] = [
   },
   {
     role: "Title Sponsor",
-    name: "Pragati Group",
-    logo: "/sponsor/pragati-cement.png",
+    name: "Delhi World Public School",
+    logo: "/sponsor/delhiWorldPublicSchool.jpeg",
     note: "Core event backing and execution support",
   },
 ];

@@ -46,17 +46,27 @@ export const teamMembers: TeamMember[] = [
     "linkedin": ""
   },
   {
-    "name": "Sukanto Hembram",
+    "name": "Sukanta Hembram",
     "role": "Social Media Head",
     "image": "/team/23.jpg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
     "linkedin": ""
-  },{
+  },
+  {
     "name": "Gouri Shankar Mahato",
     "role": "Social Media Head",
     "image": "/team/29.jpeg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "SK Sajarul Hakue",
+    "role": "Social Media Head",
+    "image": "/team/34.jpg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
@@ -135,6 +145,33 @@ export const teamMembers: TeamMember[] = [
     "linkedin": ""
   },
   {
+    "name": "Pracheta Maity",
+    "role": "Decoration Head",
+    "image": "/team/32.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Sayantan Biswas",
+    "role": "PR Head",
+    "image": "/team/35.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Supra Mandal",
+    "role": "PR Head",
+    "image": "/team/37.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
     "name": "Soumen Mandal",
     "role": "Vice President",
     "image": "/team/2.jpg",
@@ -198,6 +235,15 @@ export const teamMembers: TeamMember[] = [
     "linkedin": ""
   },
   {
+    "name": "Taufique Hossain",
+    "role": "Cultural Co head",
+    "image": "/team/39.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
     "name": "Purnabrata Dey",
     "role": "Web Designers",
     "image": "/team/7.jpg",
@@ -255,6 +301,24 @@ export const teamMembers: TeamMember[] = [
     "name": "Rakesh Mondal",
     "role": "Security Vice Head",
     "image": "/team/19.jpeg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Biddyut Dhara",
+    "role": "Decoration Vice Head",
+    "image": "/team/33.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Arijit Ghoshal",
+    "role": "PR Vice Head",
+    "image": "/team/38.jpg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
