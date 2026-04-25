@@ -3,11 +3,13 @@
 import { Zap, ShieldCheck, Box, ChevronRight } from 'lucide-react'
 import { motion, useMotionValue, useTransform } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
+import Image from 'next/image'
 
 const TshirtSection = () => {
     const x = useMotionValue(0)
     const y = useMotionValue(0)
     const [enableTilt, setEnableTilt] = useState(false)
+    const [showComingSoon, setShowComingSoon] = useState(false)
 
     // Slight 3D rotation based on mouse position
     const rotateX = useTransform(y, [-100, 100], [10, -10])
@@ -30,6 +32,11 @@ const TshirtSection = () => {
     const handleMouseLeave = () => {
         x.set(0)
         y.set(0)
+    }
+
+    const handleOrderNow = () => {
+        setShowComingSoon(true)
+        window.setTimeout(() => setShowComingSoon(false), 2000)
     }
 
     return (
@@ -119,15 +126,16 @@ const TshirtSection = () => {
                             <motion.div
                                 animate={{ y: [-10, 10, -10] }}
                                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                                className="relative z-10 rounded-2xl border border-accent/25 bg-black/40 backdrop-blur-sm px-8 py-10 md:px-12 md:py-14 text-center shadow-[0_0_40px_rgba(213,206,163,0.12)]"
+                                className="relative z-10 w-full max-w-[260px] md:max-w-[340px] lg:max-w-[380px]"
                                 style={{ transform: "translateZ(50px)" }}
                             >
-                                <p className="text-[10px] md:text-xs font-inter tracking-[0.3em] uppercase text-accent/70 mb-3">
-                                    Festival T-Shirt
-                                </p>
-                                <h3 className="text-3xl md:text-5xl font-bold font-cinzel text-transparent bg-clip-text bg-gradient-to-r from-fest-gold to-fest-saffron tracking-wider">
-                                    Coming Soon
-                                </h3>
+                                <Image
+                                    src="/tshirt.png"
+                                    alt="Official Aikatan festival t-shirt"
+                                    width={800}
+                                    height={1000}
+                                    className="h-auto w-full scale-90 object-contain drop-shadow-[0_18px_35px_rgba(0,0,0,0.55)]"
+                                />
                             </motion.div>
                         </motion.div>
                     </div>
@@ -145,17 +153,20 @@ const TshirtSection = () => {
 
                         <div className="space-y-6">
                             <div className="flex items-baseline gap-2 md:gap-3">
-                                <span className="text-2xl md:text-3xl font-bold text-highlight font-spaceGrotesk tracking-widest">₹---</span>
-                                <span className="text-accent/40 line-through text-[10px] md:text-xs font-kodeMono">TBA</span>
+                                <span className="text-2xl md:text-3xl font-bold text-highlight font-spaceGrotesk tracking-widest">₹200</span>
+                                <span className="text-accent/40 line-through text-[10px] md:text-xs font-kodeMono">299</span>
                             </div>
 
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.95 }}
+                                onClick={handleOrderNow}
                                 className="w-full h-12 md:h-14 bg-fest-pink/10 hover:bg-fest-pink/20 border border-fest-pink text-fest-pink font-outfit font-bold text-[10px] md:text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2 group shadow-[0_0_15px_rgba(227,74,123,0.15)] hover:shadow-[0_0_25px_rgba(227,74,123,0.3)] backdrop-blur-sm"
                             >
-                                Pre-order Now
-                                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                {showComingSoon ? "Coming Soon!" : "Order Now"}
+                                {!showComingSoon && (
+                                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                )}
                             </motion.button>
                         </div>
                     </div>
