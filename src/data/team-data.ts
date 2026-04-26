@@ -82,6 +82,15 @@ export const teamMembers: TeamMember[] = [
     "linkedin": ""
   },
   {
+    "name": "Antaripa Dutta",
+    "role": "Cultural Head",
+    "image": "/team/41.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
     "name": "Sukdeb Rajak",
     "role": "Sponsorship Head",
     "image": "/team/15.jpg",
