@@ -1,17 +1,46 @@
 export type sponsorDataType = {
-  img: string;
+  role: string;
+  name: string;
+  logo?: string;
+  note?: string;
 };
 
 export const sponsorData: sponsorDataType[] = [
-  { img: "/sponsor/ardent_logo.png" },
-  { img: "/sponsor/bongochorcha.png" },
-  { img: "/sponsor/city-mall.png" },
-  { img: "/sponsor/ekchokho.png" },
-  { img: "/sponsor/eventmas.png" },
-  { img: "/sponsor/friends-fm.png" },
-  { img: "/sponsor/pragati-cement.png" },
-  { img: "/sponsor/reel2real.png" },
-  { img: "/sponsor/sagar-raj-resorts.png" },
-  { img: "/sponsor/sri-rajgharia.png" },
-  { img: "/sponsor/telegraph.png" },
+  {
+    role: "Media Partner",
+    name: "Ei Samay",
+    note: "News coverage and event visibility",
+    logo: "/sponsor/1.png",
+  },
+  {
+    role: "Radio Partner",
+    name: "91.9 Friends FM",
+    logo: "/sponsor/friends-fm.png",
+    note: "On-air promotion and audience reach",
+  },
+  {
+    role: "Food Partner",
+    name: "Sorella",
+    note: "Food services for event attendees",
+    logo: "/sponsor/6.jpeg",
+  },
+  
+  {
+    role: "Hospitality Partner",
+    name: "Pearl Tree Hotels & Resorts",
+    logo: "/sponsor/4.jpeg",
+    note: "Guest experience and hospitality support",
+  },
+  {
+    role: "Fitness Partner",
+    name: "Gravity Gym",
+    note: "Wellness and fitness association",
+    logo: "/sponsor/5.jpeg",
+  },
+  {
+    role: "Title Sponsor",
+    name: "Delhi World Public School",
+    logo: "/sponsor/delhiWorldPublicSchool.jpeg",
+    note: "Core event backing and execution support",
+  },
 ];

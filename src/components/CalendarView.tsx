@@ -1,22 +1,23 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { EventDetailsModal } from "./EventDetailsModal";
+import { Flower2, Sparkles, Flame, Music } from "lucide-react";
 
 // --- Types & Constants ---
-interface CalendarEvent {
+export interface CalendarEvent {
   date: number;
   month: number;
   title: string;
-  type: "tech" | "esports" | "holiday";
+  type: "tech" | "esports" | "holiday" | "cultural";
   startTime?: string;
   endTime?: string;
   description?: string;
   venue?: string;
 }
 
-interface CalendarViewProps {
+export interface CalendarViewProps {
   month: number;
   year: number;
   events: CalendarEvent[];
@@ -31,390 +32,312 @@ interface MobileTimelineEntry {
   isFestivalDay: boolean;
 }
 
+// Ensure festival dates match your specific cultural fest days
 const FESTIVAL_DATES = [
-  { date: 29, month: 3, label: "PHASE 0" },
-  { date: 30, month: 3, label: "PHASE 1" },
-  { date: 1, month: 4, label: "PHASE 2" },
-  { date: 2, month: 4, label: "PHASE 3" },
+  { date: 15, month: 5, label: "MAHA UTSAV - DAY 1" },
+  { date: 16, month: 5, label: "MAHA UTSAV - DAY 2" },
 ];
 
-export const CalendarView: React.FC<CalendarViewProps> = ({
-  month,
-  year,
-  events,
-  allEvents = events,
-}) => {
+// --- Cultural Fest Styling Helpers ---
+const getEventStyles = (type: string) => {
+  const styles = {
+    cultural: {
+      color: "text-fuchsia-300",
+      dot: "bg-fuchsia-500 shadow-[0_0_8px_rgba(217,70,239,0.8)]",
+      border: "border-fuchsia-500/30",
+    },
+    tech: {
+      color: "text-indigo-300",
+      dot: "bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)]",
+      border: "border-indigo-500/30",
+    },
+    esports: {
+      color: "text-rose-300",
+      dot: "bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]",
+      border: "border-rose-500/30",
+    },
+    holiday: {
+      color: "text-amber-300",
+      dot: "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]",
+      border: "border-amber-400/30",
+    },
+  };
+  return styles[type as keyof typeof styles] || styles.cultural;
+};
+
+// --- Time Formatter ---
+function formatTime(time: string): string {
+  const [h, m] = time.split(":").map(Number);
+  const ampm = h >= 12 && h < 24 ? "PM" : "AM";
+  const hr = h % 12 || 12;
+  return `${hr}:${m.toString().padStart(2, "0")} ${ampm}`;
+}
+
+// ==========================================
+// 1. Mobile Timeline Component (Simplified)
+// ==========================================
+const MobileTimeline = ({ entries, year }: { entries: MobileTimelineEntry[]; year: number }) => {
+  return (
+    <div className="md:hidden relative w-full">
+      <motion.div
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: { opacity: 0 },
+          show: { opacity: 1, transition: { staggerChildren: 0.1 } },
+        }}
+        className="relative"
+      >
+        <div className="space-y-6">
+          {entries.map((entry) => {
+            const isFestival = entry.isFestivalDay;
+            const dt = new Date(year, entry.month - 1, entry.date);
+            const weekday = dt.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
+            const monthDay = dt.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
+
+            return (
+              <motion.div
+                variants={{ hidden: { opacity: 0, x: -10 }, show: { opacity: 1, x: 0 } }}
+                key={`${entry.date}-${entry.month}`}
+                className="relative w-full"
+              >
+                <div
+                  className={`rounded-2xl p-5 transition-all duration-300
+                  ${isFestival ? "bg-gradient-to-br from-fuchsia-900/40 to-[#2e0219]/80 border border-fuchsia-500/30 shadow-lg" : "bg-[#1a0b1c]/60 border border-white/5"}`}
+                >
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
+                    <div className="flex flex-col">
+                      {isFestival ? (
+                        entry.labels.map((label) => (
+                          <span key={label} className="text-xs font-bold text-amber-400 tracking-widest uppercase">
+                            {label}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-xs font-semibold text-white/50 tracking-widest uppercase">
+                          Schedule
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[11px] tracking-wide text-white/70">
+                      <span className="font-bold text-fuchsia-300">{weekday}</span> | {monthDay}
+                    </div>
+                  </div>
+
+                  {/* Events */}
+                  {entry.events.length > 0 ? (
+                    <div className="space-y-2">
+                      {entry.events.map((event, idx) => {
+                        const eStyles = getEventStyles(event.type);
+                        return (
+                          <div key={idx} className={`flex flex-col rounded-xl border ${eStyles.border} bg-black/20 p-3`}>
+                            <div className="flex items-start justify-between gap-2">
+                              <p className={`text-sm font-semibold ${eStyles.color}`}>{event.title}</p>
+                              <span className={`mt-1 w-2 h-2 shrink-0 rounded-full ${eStyles.dot}`} />
+                            </div>
+                            {(event.startTime || event.venue) && (
+                              <div className="mt-2 flex gap-2 text-[10px] text-white/60 uppercase">
+                                {event.startTime && <span>{formatTime(event.startTime)}</span>}
+                                {event.startTime && event.venue && <span>•</span>}
+                                {event.venue && <span className="truncate">{event.venue}</span>}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-white/40 italic">Awaiting details...</p>
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+// ==========================================
+// 2. Main Calendar View Component
+// ==========================================
+export const CalendarView: React.FC<CalendarViewProps> = ({ month, year, events, allEvents = events }) => {
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
+  const [audioCtx, setAudioCtx] = useState<AudioContext | null>(null);
 
-  // --- Grid Logic (Desktop) ---
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  useEffect(() => {
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    if (AudioContextClass) setAudioCtx(new AudioContextClass());
+  }, []);
+
+  const playSound = (type: 'hover' | 'click') => {
+    if (!audioCtx) return;
+    if (audioCtx.state === 'suspended') {
+      try { audioCtx.resume(); } catch {}
+    }
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      if (type === 'hover') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(700, audioCtx.currentTime + 0.05);
+        gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+        osc.start(audioCtx.currentTime);
+        osc.stop(audioCtx.currentTime + 0.05);
+      } else {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+        osc.start(audioCtx.currentTime);
+        osc.stop(audioCtx.currentTime + 0.1);
+      }
+    } catch {}
+  };
+
+  const monthName = useMemo(() => {
+    return new Date(year, month - 1).toLocaleString('default', { month: 'long' }).toUpperCase();
+  }, [year, month]);
 
   const calendarDays = useMemo(() => {
+    const firstDay = new Date(year, month - 1, 1).getDay();
+    const daysInMonth = new Date(year, month, 0).getDate();
     const days = [];
     for (let i = 0; i < firstDay; i++) days.push(null);
     for (let i = 1; i <= daysInMonth; i++) days.push({ date: i, month: month });
-    // Bleeding into next month
-    days.push({ date: 1, month: month + 1 }, { date: 2, month: month + 1 });
-    while (days.length % 7 !== 0) days.push(null);
+    const remaining = (7 - (days.length % 7)) % 7;
+    for (let i = 0; i < remaining; i++) days.push(null);
     return days;
-  }, [firstDay, daysInMonth, month]);
+  }, [year, month]);
 
-  // --- Timeline Logic (Mobile) ---
   const mobileTimelineEntries = useMemo(() => {
     const combinedMap = new Map<string, MobileTimelineEntry>();
-
-    // 1. Seed festival dates
     FESTIVAL_DATES.forEach((fd) => {
-      const key = `${fd.date}-${fd.month}`;
-      combinedMap.set(key, {
-        date: fd.date,
-        month: fd.month,
-        labels: [fd.label],
-        events: [],
-        isFestivalDay: true,
-      });
+      combinedMap.set(`${fd.date}-${fd.month}`, { ...fd, labels: [fd.label], events: [], isFestivalDay: true });
     });
-
-    // 2. Attach non-holiday events only to phase dates
     events.forEach((e) => {
       const key = `${e.date}-${e.month}`;
       const existing = combinedMap.get(key);
       if (existing) {
-        if (e.type !== "holiday") {
-          existing.events.push(e);
-        }
+        existing.events.push(e);
+      } else {
+        combinedMap.set(key, { date: e.date, month: e.month, labels: [], events: [e], isFestivalDay: false });
       }
     });
-
-    // 3. Sort chronologically
     return Array.from(combinedMap.values()).sort(
-      (a, b) =>
-        new Date(year, a.month, a.date).getTime() -
-        new Date(year, b.month, b.date).getTime()
+      (a, b) => new Date(year, a.month - 1, a.date).getTime() - new Date(year, b.month - 1, b.date).getTime()
     );
   }, [events, year]);
 
-  const formatMobileDate = (entry: MobileTimelineEntry) => {
-    const dt = new Date(year, entry.month, entry.date);
-    return {
-      weekday: dt.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase(),
-      monthDay: dt.toLocaleDateString("en-US", { month: "short", day: "2-digit" }),
-    };
-  };
-
-  // --- Styling Helpers ---
-  const getEventStyles = (type: string) => {
-    const styles = {
-      tech: {
-        color: "text-cyan-400",
-        dot: "bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.9)]",
-        glow: "drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]",
-        border: "border-cyan-400/50",
-      },
-      esports: {
-        color: "text-purple-400",
-        dot: "bg-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.9)]",
-        glow: "drop-shadow-[0_0_8px_rgba(192,132,252,0.6)]",
-        border: "border-purple-400/50",
-      },
-      holiday: {
-        color: "text-amber-300",
-        dot: "bg-amber-300 shadow-[0_0_10px_rgba(252,211,77,0.9)]",
-        glow: "drop-shadow-[0_0_8px_rgba(252,211,77,0.6)]",
-        border: "border-amber-300/50",
-      },
-    };
-    return (
-      styles[type as keyof typeof styles] || {
-        color: "text-white",
-        dot: "bg-white shadow-[0_0_10px_rgba(255,255,255,0.9)]",
-        glow: "",
-        border: "border-white/30",
-      }
-    );
-  };
-
-  const gridVariants = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.04 } },
-  };
-
-  const nodeVariants = {
-    hidden: { opacity: 0, scale: 0, rotate: -45 },
-    show: { opacity: 1, scale: 1, rotate: 0, transition: { type: "spring", bounce: 0.4 } },
-  };
-
   return (
-    <section className="relative w-full py-10 md:py-16 px-4 sm:px-6 lg:px-8 bg-[#020202] overflow-hidden min-h-screen flex flex-col font-sans">
+    // Deep elegant violet/black base for cultural vibe
+    <section className="relative w-full py-12 px-4 sm:px-6 lg:px-8 bg-[#0a0208] overflow-hidden flex flex-col font-sans min-h-screen">
       
-      {/* 1. Deep Space / Grid Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] bg-primary/10 blur-[120px] md:blur-[150px] rounded-full opacity-60" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:30px_30px] md:bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_90%_90%_at_50%_50%,#000_20%,transparent_100%)]" />
+      {/* Background Ambience (Magenta & Gold Glow) */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-fuchsia-600/20 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-amber-500/10 blur-[100px] rounded-full" />
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col gap-8 md:gap-12 flex-1">
+      <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col gap-8 flex-1">
         
-        {/* 2. Command Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-6 border-b border-white/10 pb-6"
-        >
-          <div className="text-center lg:text-left w-full lg:w-auto">
-            <div className="flex items-center justify-center lg:justify-start gap-3 mb-3">
-              <span className="w-2 h-2 bg-primary animate-pulse shadow-[0_0_10px_var(--primary)]" />
-              <span className="text-[10px] md:text-xs font-kodeMono tracking-[0.3em] md:tracking-[0.4em] text-primary uppercase border border-primary/30 px-3 py-1 rounded-[2px] bg-primary/10 whitespace-nowrap">
-                Data Node Matrix
-              </span>
-            </div>
-            <h2 className="text-4xl sm:text-5xl md:text-7xl font-orbitron font-black text-white tracking-tighter uppercase leading-none break-words">
-              Network <span className="text-transparent stroke-text italic">Uplink</span>
-            </h2>
-          </div>
-          
-          {/* Legend / Stats */}
-          <div className="flex flex-wrap justify-center lg:justify-end gap-3 sm:gap-6 items-center border border-white/10 bg-black/40 backdrop-blur-md px-5 py-3 rounded-xl sm:rounded-full shadow-2xl w-full lg:w-auto">
-            {['tech', 'esports', 'holiday'].map(type => {
-              const styles = getEventStyles(type);
-              return (
-                <div key={type} className="flex items-center gap-2">
-                  <span className={`w-2.5 h-2.5 rounded-full ${styles.dot}`} />
-                  <span className="text-[10px] sm:text-xs font-kodeMono uppercase tracking-widest text-white/70">
-                    {type}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center md:text-left border-b border-fuchsia-900/30 pb-6 flex items-center justify-center md:justify-start gap-4">
+          <Flower2 className="text-fuchsia-400 w-10 h-10 md:w-12 md:h-12 hidden md:block" />
+          <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight font-cinzel flex items-center justify-center md:justify-start gap-3 w-full">
+            <span className="md:hidden"><Flower2 className="text-fuchsia-400 w-8 h-8" /></span>
+            Festival <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-amber-300">Timeline</span>
+            <Sparkles className="text-amber-400 w-6 h-6 md:w-8 md:h-8" />
+          </h2>
         </motion.div>
 
-        {/* 3. The Node Matrix (Creative Calendar Grid) */}
-        <div className="relative w-full bg-black/30 backdrop-blur-xl border border-white/5 rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-
-          {/* =========================================
-              MOBILE VIEW: CLEAN SEPARATED TIMELINE
-             ========================================= */}
-          <div className="md:hidden relative w-[calc(100%+1rem)] -ml-2">
-            <motion.div
-              initial="hidden"
-              animate="show"
-              variants={{
-                hidden: { opacity: 0 },
-                show: { opacity: 1, transition: { staggerChildren: 0.08 } },
-              }}
-              className="relative pl-7 sm:pl-9" // Gives space for the left timeline while keeping cards wider
-            >
-              {/* Central Glowing Line (Positioned cleanly outside the cards) */}
-              <div className="absolute left-[8px] sm:left-[12px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-primary via-primary/30 to-transparent rounded-full" />
-              
-              <div className="space-y-7">
-                {mobileTimelineEntries.map((entry) => {
-                  const isFestival = entry.isFestivalDay;
-                  const activeBorderClass = isFestival
-                    ? "border-primary/50 bg-primary/5"
-                    : "border-white/10 bg-white/[0.02]";
-                  const dateMeta = formatMobileDate(entry);
-
-                  return (
-                    <motion.div
-                      variants={{
-                        hidden: { opacity: 0, x: -10 },
-                        show: { opacity: 1, x: 0 },
-                      }}
-                      key={`${entry.date}-${entry.month}`}
-                      className="relative w-full group"
-                    >
-                      {/* Independent Timeline Dot */}
-                      <div className={`absolute -left-[34px] sm:-left-[38px] top-5 w-5 h-5 rounded-full border-[3px] border-[#020202] z-10 transition-transform group-active:scale-90 ${isFestival ? 'bg-primary shadow-[0_0_12px_var(--primary)]' : 'bg-white/40'}`} />
-
-                      {/* The Data Card (Compressed & Clean) */}
-                      <div className={`rounded-2xl border backdrop-blur-md shadow-lg p-5 sm:p-6 transition-all duration-300 ${activeBorderClass}`}>
-                        
-                        {/* Card Header */}
-                        <div className="flex items-start justify-between gap-3 mb-4 border-b border-white/5 pb-3">
-                          <div className="flex flex-col gap-1">
-                            {isFestival && entry.labels.length > 0 ? (
-                              <div className="flex flex-wrap gap-1.5">
-                                {entry.labels.map((label) => (
-                                  <span key={label} className="text-[11px] sm:text-xs font-kodeMono uppercase tracking-[0.2em] font-bold text-primary">
-                                    {label}
-                                  </span>
-                                ))}
-                              </div>
-                            ) : (
-                              <span className="text-[11px] sm:text-xs font-kodeMono uppercase tracking-[0.2em] font-semibold text-white/50">
-                                Schedule
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Date Badge */}
-                          <div className="flex items-center gap-1.5 text-[11px] font-kodeMono tracking-[0.05em] text-white/80 shrink-0 bg-black/50 px-2.5 py-1.5 rounded-md border border-white/10">
-                            <span className="font-bold">{dateMeta.weekday}</span>
-                            <span className="text-white/40">|</span>
-                            <span>{dateMeta.monthDay}</span>
-                          </div>
-                        </div>
-
-                        {/* Event Slots */}
-                        {entry.events.length > 0 ? (
-                          <div className="space-y-3">
-                            {entry.events.map((event, eventIdx) => {
-                              const eStyles = getEventStyles(event.type);
-
-                              return (
-                                <div
-                                  key={`${entry.date}-${entry.month}-${event.title}-${eventIdx}`}
-                                  className="w-full flex flex-col text-left rounded-xl border border-white/5 bg-black/40 p-3.5"
-                                >
-                                  <div className="flex items-start justify-between gap-3 w-full">
-                                    <p className={`text-[15px] sm:text-base font-spaceGrotesk font-semibold leading-snug ${eStyles.color}`}>
-                                      {event.title}
-                                    </p>
-                                    <span className={`mt-2 w-2 h-2 shrink-0 rounded-full ${eStyles.dot}`} />
-                                  </div>
-
-                                  {(event.startTime || event.venue) && (
-                                    <div className="mt-2.5 flex flex-wrap items-center gap-2 text-[10px] sm:text-[11px] font-kodeMono uppercase tracking-wider text-white/55">
-                                      {event.startTime && <span className="bg-white/5 px-2 py-1 rounded">{event.startTime}</span>}
-                                      {event.venue && <span className="bg-white/5 px-2 py-1 rounded truncate max-w-[170px]">{event.venue}</span>}
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        ) : (
-                          <div className="py-3 flex items-center gap-2.5 text-white/30">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                            <p className="text-sm font-spaceGrotesk italic">No events mapped</p>
-                          </div>
-                        )}
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </motion.div>
+        {/* Content Area */}
+        <div className="relative w-full bg-[#1c0822]/40 backdrop-blur-xl border border-fuchsia-500/20 rounded-3xl p-4 sm:p-8 shadow-2xl overflow-hidden">
+          
+          {/* Music Watermarks Inside Calendar Box */}
+          <div className="absolute inset-0 pointer-events-none z-0">
+            <Music className="absolute top-[15%] left-[8%] w-10 h-10 md:w-20 md:h-20 text-fuchsia-500/10 -rotate-12" />
+            <Music className="absolute bottom-[20%] left-[20%] w-12 h-12 md:w-24 md:h-24 text-amber-500/10 rotate-[20deg]" />
+            <Music className="absolute top-[10%] right-[15%] w-8 h-8 md:w-16 md:h-16 text-fuchsia-400/10 rotate-12" />
+            <Music className="absolute top-[50%] right-[5%] w-10 h-10 md:w-18 md:h-18 text-amber-400/10 -rotate-[15deg]" />
+            <Music className="absolute bottom-[10%] right-[30%] w-14 h-14 md:w-24 md:h-24 text-fuchsia-500/10 rotate-[10deg]" />
+            <Music className="absolute top-[35%] left-[45%] w-8 h-8 md:w-16 md:h-16 text-amber-400/10 -rotate-6" />
           </div>
           
-          {/* =========================================
-              DESKTOP VIEW: DATA NODE MATRIX 
-             ========================================= */}
+          <MobileTimeline entries={mobileTimelineEntries} year={year} />
+
+          {/* Desktop Grid View (Cleaned Up) */}
           <div className="hidden md:block">
-            {/* Horizontal Connection Lines behind nodes */}
-            <div className="absolute inset-0 top-[80px] bottom-[20px] flex flex-col justify-around pointer-events-none opacity-20 px-10">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="w-full h-[1px] bg-gradient-to-r from-transparent via-white to-transparent dashed-line" />
-              ))}
+            {/* Header: Month and Year */}
+            <div className="flex justify-between items-end mb-4 px-4 border-b border-white/5 pb-2">
+              <h3 className="text-2xl font-cinzel font-bold text-fuchsia-200 tracking-widest drop-shadow-lg uppercase">
+                {monthName} {year}
+              </h3>
             </div>
 
-            {/* Days Header */}
-            <div className="grid grid-cols-7 mb-12 relative z-10">
-              {daysOfWeek.map((day) => (
-                <div key={day} className="text-center flex flex-col items-center gap-2">
-                  <span className="text-xs font-kodeMono tracking-[0.2em] text-white/40 uppercase">{day}</span>
-                  <div className="w-1 h-1 bg-white/20 rounded-full" />
+            <div className="grid grid-cols-7 mb-6 relative z-10 mt-4">
+              {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((day) => (
+                <div key={day} className="text-center text-xs font-semibold tracking-widest text-white/40 uppercase">
+                  {day}
                 </div>
               ))}
             </div>
 
-            {/* Nodes */}
             <motion.div 
-              variants={gridVariants}
-              initial="hidden"
-              animate="show"
-              className="grid grid-cols-7 gap-y-12 place-items-center relative z-10"
+              variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.03 } } }}
+              initial="hidden" animate="show"
+              className="grid grid-cols-7 gap-y-8 place-items-center relative z-10"
             >
               {calendarDays.map((dayObj, idx) => {
-                const isFestival = dayObj && FESTIVAL_DATES.some(d => d.date === dayObj.date && d.month === dayObj.month);
-                const festivalInfo = dayObj ? FESTIVAL_DATES.find(d => d.date === dayObj.date && d.month === dayObj.month) : null;
-                const event = dayObj ? events.find(e => e.date === dayObj.date && e.month === dayObj.month) : null;
-                const eStyles = event ? getEventStyles(event.type) : null;
+                if (!dayObj) return <div key={idx} className="w-14 h-14" />;
 
-                // Empty Node Slot
-                if (!dayObj) {
-                  return (
-                    <div key={idx} className="w-8 h-8 flex items-center justify-center opacity-10">
-                      <span className="text-white/50 text-xs">+</span>
-                    </div>
-                  );
-                }
+                const isFestival = FESTIVAL_DATES.some(d => d.date === dayObj.date && d.month === dayObj.month);
+                const event = events.find(e => e.date === dayObj.date && e.month === dayObj.month);
+                const isInteractive = isFestival || event;
 
                 return (
                   <motion.div
-                    variants={nodeVariants}
+                    variants={{ hidden: { opacity: 0, scale: 0.9 }, show: { opacity: 1, scale: 1 } }}
+                    whileHover={{ scale: isInteractive ? 1.15 : 1.05, y: isInteractive ? -2 : 0 }}
+                    whileTap={{ scale: isInteractive ? 0.95 : 1 }}
                     key={idx}
+                    onMouseEnter={() => {
+                        if (isInteractive) playSound('hover');
+                    }}
                     onClick={() => {
-                      if (isFestival || event) {
+                      if (isInteractive) {
+                        playSound('click');
                         setSelectedDate(dayObj.date);
                         setSelectedMonth(dayObj.month);
                       }
                     }}
-                    className={`relative flex flex-col items-center justify-center group/node
-                      ${(isFestival || event) ? 'cursor-pointer z-30' : 'z-10'}
-                    `}
-                  >
-                    {isFestival && (
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <div className="absolute w-[120px] h-[120px] rounded-full border border-primary/40 animate-radar-spin" />
-                        <div className="absolute w-[90px] h-[90px] rounded-full border border-primary/20 animate-radar-spin-reverse" />
-                        <div className="absolute w-[200%] h-[2px] bg-gradient-to-r from-transparent via-primary/50 to-transparent top-1/2 -translate-y-1/2 -z-10 animate-pulse hidden lg:block" />
-                      </div>
-                    )}
-
-                    <div className={`relative flex items-center justify-center transition-all duration-500
+                    className={`relative flex items-center justify-center transition-all duration-300 rounded-2xl
+                      ${isInteractive ? 'cursor-pointer hover:shadow-lg' : ''}
                       ${isFestival 
-                        ? 'w-20 h-20 bg-black border-2 border-primary/80 shadow-[0_0_30px_rgba(184,92,56,0.3)] group-hover/node:scale-110 group-hover/node:bg-primary/10 rounded-lg rotate-45 group-hover/node:rotate-90' 
+                        ? 'w-16 h-16 bg-gradient-to-br from-fuchsia-600/40 to-amber-500/30 border border-amber-400/60 shadow-[0_4px_20px_rgba(217,70,239,0.4)]' 
                         : event
-                        ? 'w-14 h-14 bg-white/5 border-2 border-white/30 rounded-full group-hover/node:bg-white/10 group-hover/node:scale-110'
-                        : 'w-14 h-14 bg-white/[0.03] border border-white/10 rounded-full group-hover/node:border-white/30 group-hover/node:bg-white/10'
-                      }
-                    `}>
-                      <span className={`font-spaceGrotesk leading-none transition-colors duration-300
-                        ${isFestival 
-                          ? 'text-4xl text-white font-bold drop-shadow-[0_0_10px_#fff] -rotate-45 group-hover/node:-rotate-90' 
-                          : event 
-                          ? 'text-2xl text-white font-medium'
-                          : 'text-xl text-white/50 group-hover/node:text-white font-light'
-                        }
-                      `}>
-                        {String(dayObj.date).padStart(2, '0')}
-                      </span>
-
-                      {event && !isFestival && eStyles && (
-                        <div className={`absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-black animate-pulse ${eStyles.dot}`} />
-                      )}
-                    </div>
-
-                    <div className="absolute top-[110%] w-[120px] text-center flex flex-col items-center gap-1">
-                      {isFestival && (
-                        <>
-                          <span className="text-xs font-kodeMono font-bold text-primary tracking-widest uppercase drop-shadow-[0_0_5px_var(--primary)] whitespace-nowrap">
-                            {festivalInfo?.label}
-                          </span>
-                          <div className="mt-1 flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] border border-primary/50 bg-primary/10 backdrop-blur-md opacity-80 group-hover/node:opacity-100 group-hover/node:bg-primary/30 group-hover/node:scale-110 transition-all cursor-pointer shadow-[0_0_15px_rgba(184,92,56,0.2)]">
-                            <svg className="w-2.5 h-2.5 text-primary animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                            </svg>
-                            <span className="text-[9px] font-kodeMono text-white tracking-[0.1em] uppercase whitespace-nowrap">
-                              Engage
-                            </span>
-                          </div>
-                        </>
-                      )}
-                      {event && !isFestival && eStyles && (
-                        <span className={`text-[10px] font-kodeMono uppercase font-semibold truncate w-full ${eStyles.color} ${eStyles.glow}`}>
-                          {event.title}
-                        </span>
-                      )}
-                    </div>
+                        ? 'w-14 h-14 bg-white/10 border border-white/20 shadow-md hover:bg-white/20'
+                        : 'w-14 h-14 bg-white/5 border-transparent hover:border-white/10 hover:bg-white/10'
+                      }`}
+                  >
+                    <span className={`font-medium ${isFestival ? 'text-amber-100 font-bold text-2xl' : event ? 'text-fuchsia-100 font-semibold text-2xl' : 'text-white/60 text-xl'} font-cinzel`}>
+                      {dayObj.date}
+                    </span>
+                    
+                    {isFestival && <Flame className="absolute -top-3 -right-2 w-6 h-6 text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.8)]" />}
+                    
+                    {/* Minimal Event Indicator Dot */}
+                    {event && !isFestival && (
+                      <Flower2 className={`absolute -top-2 -right-2 w-5 h-5 ${getEventStyles(event.type).color}`} />
+                    )}
                   </motion.div>
                 );
               })}
@@ -423,45 +346,11 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
         </div>
       </div>
 
-      <style jsx>{`
-        .stroke-text {
-          -webkit-text-stroke: 1px rgba(255,255,255,0.15);
-        }
-        .dashed-line {
-          background-image: linear-gradient(to right, rgba(255,255,255,0.2) 50%, transparent 50%);
-          background-size: 10px 1px;
-          background-repeat: repeat-x;
-        }
-        @keyframes radar-spin {
-          0% { transform: scale(0.8) rotate(0deg); opacity: 0; }
-          50% { transform: scale(1.1) rotate(180deg); opacity: 0.5; border-color: var(--primary); }
-          100% { transform: scale(0.8) rotate(360deg); opacity: 0; }
-        }
-        @keyframes radar-spin-reverse {
-          0% { transform: scale(1.1) rotate(360deg); opacity: 0; }
-          50% { transform: scale(0.9) rotate(180deg); opacity: 0.3; }
-          100% { transform: scale(1.1) rotate(0deg); opacity: 0; }
-        }
-        .animate-radar-spin {
-          animation: radar-spin 4s linear infinite;
-        }
-        .animate-radar-spin-reverse {
-          animation: radar-spin-reverse 3.5s linear infinite;
-        }
-      `}</style>
-
-      {/* Modal Integration */}
       <AnimatePresence>
-        {selectedDate !== null && selectedMonth !== null && (
+        {selectedDate && selectedMonth && (
           <EventDetailsModal
-            date={selectedDate}
-            month={selectedMonth}
-            year={year}
-            events={allEvents}
-            onClose={() => {
-              setSelectedDate(null);
-              setSelectedMonth(null);
-            }}
+            date={selectedDate} month={selectedMonth} year={year} events={allEvents}
+            onClose={() => { setSelectedDate(null); setSelectedMonth(null); }}
           />
         )}
       </AnimatePresence>

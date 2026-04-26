@@ -12,11 +12,11 @@ export type EventDataType = {
   contact: string;
   lastDate: string;
   registrationLink: string;
-  type: 'techlavya' | 'esport';
+  type: 'aikatan' | 'esport';
 }
 
 
-export const TechlavyaEventData: EventDataType[] = [
+export const aikatanEventData: EventDataType[] = [
   {
     id: uuidv4(),
     title: 'HACKATHON',
@@ -29,7 +29,7 @@ export const TechlavyaEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: 'https://forms.gle/ajzqMfXUXeRrPcBG9',
-    type: 'techlavya'
+    type: 'aikatan'
   },
   {
     id: uuidv4(),
@@ -43,7 +43,7 @@ export const TechlavyaEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: 'https://forms.gle/WxxtrhwMbtq2PpzP9',
-    type: 'techlavya'
+    type: 'aikatan'
   },
   {
     id: uuidv4(),
@@ -57,7 +57,7 @@ export const TechlavyaEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: 'https://forms.gle/SYxCZjnKkNrSTpNc8',
-    type: 'techlavya'
+    type: 'aikatan'
   },
   {
     id: uuidv4(),
@@ -71,7 +71,7 @@ export const TechlavyaEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: 'https://unstop.com/o/A9EHUry?lb=cDOdwZXp&utm_medium=Share&utm_source=shortUrl',
-    type: 'techlavya'
+    type: 'aikatan'
   },
   {
     id: uuidv4(),
@@ -85,7 +85,7 @@ export const TechlavyaEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: 'https://unstop.com/o/WULgwDh?lb=cDOdwZXp&utm_medium=Share&utm_source=shortUrl',
-    type: 'techlavya'
+    type: 'aikatan'
   },
   {
     id: uuidv4(),
@@ -99,7 +99,7 @@ export const TechlavyaEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: 'https://unstop.com/o/XjsU4T5?lb=cDOdwZXp&utm_medium=Share&utm_source=shortUrl',
-    type: 'techlavya'
+    type: 'aikatan'
   },
   {
     id: uuidv4(),
@@ -113,7 +113,7 @@ export const TechlavyaEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: 'https://forms.gle/oTfk15d36X9mZLhu6',
-    type: 'techlavya'
+    type: 'aikatan'
   },
   {
     id: uuidv4(),
@@ -127,7 +127,7 @@ export const TechlavyaEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: 'https://unstop.com/o/QhmyDCc?lb=cDOdwZXp&utm_medium=Share&utm_source=shortUrl',
-    type: 'techlavya'
+    type: 'aikatan'
   }
 ]
 
@@ -288,7 +288,7 @@ export const CulturalEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: '',
-    type: 'techlavya'
+    type: 'aikatan'
   },
   {
     id: uuidv4(),
@@ -302,7 +302,7 @@ export const CulturalEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: '',
-    type: 'techlavya'
+    type: 'aikatan'
   },
   {
     id: uuidv4(),
@@ -316,7 +316,7 @@ export const CulturalEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: '',
-    type: 'techlavya'
+    type: 'aikatan'
   },
   {
     id: uuidv4(),
@@ -330,7 +330,7 @@ export const CulturalEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: '',
-    type: 'techlavya'
+    type: 'aikatan'
   },
   {
     id: uuidv4(),
@@ -344,6 +344,6 @@ export const CulturalEventData: EventDataType[] = [
     contact: 'Yet to be announced',
     lastDate: 'Yet to be announced',
     registrationLink: '',
-    type: 'techlavya'
+    type: 'aikatan'
   }
 ]

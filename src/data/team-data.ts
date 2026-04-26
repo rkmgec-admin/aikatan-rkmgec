@@ -12,16 +12,7 @@ export const teamMembers: TeamMember[] = [
   {
     "name": "Sourasish Bose",
     "role": "President",
-    "image": "/team/2.webp",
-    "instagram": "",
-    "twitter": "",
-    "facebook": "",
-    "linkedin": ""
-  },
-  {
-    "name": "Soumen Mandal",
-    "role": "Vice President",
-    "image": "/team/3.webp",
+    "image": "/team/1.jpeg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
@@ -30,16 +21,7 @@ export const teamMembers: TeamMember[] = [
   {
     "name": "Soumik Sarkar",
     "role": "Secretary",
-    "image": "/team/4.webp",
-    "instagram": "",
-    "twitter": "",
-    "facebook": "",
-    "linkedin": ""
-  },
-  {
-    "name": "Dibakar Roy",
-    "role": "Vice Secretary",
-    "image": "/team/5.webp",
+    "image": "/team/3.jpeg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
@@ -48,16 +30,7 @@ export const teamMembers: TeamMember[] = [
   {
     "name": "June Midya",
     "role": "Convenor",
-    "image": "/team/6.webp",
-    "instagram": "",
-    "twitter": "",
-    "facebook": "",
-    "linkedin": ""
-  },
-  {
-    "name": "Parna Saha",
-    "role": "Vice Convenor",
-    "image": "/team/7.webp",
+    "image": "/team/5.jpeg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
@@ -66,25 +39,34 @@ export const teamMembers: TeamMember[] = [
   {
     "name": "Soumik Saha",
     "role": "Budgeting Head",
-    "image": "/team/8.webp",
+    "image": "/team/9.jpeg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
     "linkedin": ""
   },
   {
-    "name": "Dibakar Kushari",
-    "role": "Budgeting Vice Head",
-    "image": "/team/9.webp",
+    "name": "Sukanta Hembram",
+    "role": "Social Media Head",
+    "image": "/team/23.jpg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
     "linkedin": ""
   },
   {
-    "name": "Samarpita Dey",
-    "role": "Cultural Head",
-    "image": "/team/10.webp",
+    "name": "Gouri Shankar Mahato",
+    "role": "Social Media Head",
+    "image": "/team/29.jpeg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "SK Sajarul Hakue",
+    "role": "Social Media Head",
+    "image": "/team/34.jpg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
@@ -93,34 +75,7 @@ export const teamMembers: TeamMember[] = [
   {
     "name": "Debajit Ghosh",
     "role": "Cultural Head",
-    "image": "/team/11.webp",
-    "instagram": "",
-    "twitter": "",
-    "facebook": "",
-    "linkedin": ""
-  },
-  {
-    "name": "Abantika Das",
-    "role": "Cultural Vice Head",
-    "image": "/team/12.webp",
-    "instagram": "",
-    "twitter": "",
-    "facebook": "",
-    "linkedin": ""
-  },
-  {
-    "name": "Aditya Hansda",
-    "role": "Security Head",
-    "image": "/team/13.webp",
-    "instagram": "",
-    "twitter": "",
-    "facebook": "",
-    "linkedin": ""
-  },
-  {
-    "name": "Rakesh Mondal",
-    "role": "Security Vice Head",
-    "image": "/team/14.webp",
+    "image": "/team/11.jpg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
@@ -129,7 +84,7 @@ export const teamMembers: TeamMember[] = [
   {
     "name": "Sukdeb Rajak",
     "role": "Sponsorship Head",
-    "image": "/team/15.webp",
+    "image": "/team/15.jpg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
@@ -138,16 +93,178 @@ export const teamMembers: TeamMember[] = [
   {
     "name": "Ashim Chattaraj",
     "role": "Sponsorship Head",
-    "image": "/team/16.webp",
+    "image": "/team/16.jpeg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
     "linkedin": ""
   },
   {
-    "name": "Subhrajit Mahato",
+    "name": "Shubhrajit Mahato ",
     "role": "Sponsorship Head",
-    "image": "/team/17.webp",
+    "image": "/team/17.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Tuhinkanti Roy",
+    "role": "Marketing Head",
+    "image": "/team/20.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Joyprakash Mahato",
+    "role": "Marketing Head",
+    "image": "/team/21.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Aditya Hansda",
+    "role": "Security Head",
+    "image": "/team/30.jpeg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Subham Kumar Burnwal",
+    "role": "Security Head",
+    "image": "/team/31.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Pracheta Maity",
+    "role": "Decoration Head",
+    "image": "/team/32.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Sayantan Biswas",
+    "role": "PR Head",
+    "image": "/team/35.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Supra Mandal",
+    "role": "PR Head",
+    "image": "/team/37.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Soumen Mandal",
+    "role": "Vice President",
+    "image": "/team/2.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Dibakar Roy",
+    "role": "Vice Secretary",
+    "image": "/team/4.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Parna Saha",
+    "role": "Vice Convenor",
+    "image": "/team/6.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Dibakar Kushari",
+    "role": "Budgeting Co head",
+    "image": "/team/10.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Koushik Mandal",
+    "role": "Social Media Co head",
+    "image": "/team/26.jpeg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Kamlesh Mahato",
+    "role": "Social Media Co head",
+    "image": "/team/32.jpeg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Abantika Das",
+    "role": "Cultural Co head",
+    "image": "/team/12.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Taufique Hossain",
+    "role": "Cultural Co head",
+    "image": "/team/39.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Purnabrata Dey",
+    "role": "Web Designers",
+    "image": "/team/7.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Nilanjan Sau",
+    "role": "Web Designers",
+    "image": "/team/8.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Debojyoti Saha",
+    "role": "Web Designers",
+    "image": "/team/25.jpeg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
@@ -155,8 +272,8 @@ export const teamMembers: TeamMember[] = [
   },
   {
     "name": "Sisir Roy",
-    "role": "Sponsorship Vice Head",
-    "image": "/team/18.webp",
+    "role": "Sponsorship Co head",
+    "image": "/team/18.jpeg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
@@ -164,20 +281,47 @@ export const teamMembers: TeamMember[] = [
   },
   {
     "name": "Bushra Bano",
-    "role": "Sponsorship Vice Head",
-    "image": "/team/19.webp",
+    "role": "Sponsorship Co head",
+    "image": "/team/28.jpg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
     "linkedin": ""
   },
   {
-    "name": "SK Zeeshan",
-    "role": "Sponsorship Vice Head",
-    "image": "/team/20.webp",
+    "name": "Jayanta Mahato",
+    "role": "Marketing Vice Head",
+    "image": "/team/24.jpg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
     "linkedin": ""
-  }
+  },
+  {
+    "name": "Rakesh Mondal",
+    "role": "Security Vice Head",
+    "image": "/team/19.jpeg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Biddyut Dhara",
+    "role": "Decoration Vice Head",
+    "image": "/team/33.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Arijit Ghoshal",
+    "role": "PR Vice Head",
+    "image": "/team/38.jpg",
+    "instagram": "",
+    "twitter": "",
+    "facebook": "",
+    "linkedin": ""
+  },
 ];
