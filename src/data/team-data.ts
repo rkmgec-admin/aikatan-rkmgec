@@ -237,7 +237,7 @@ export const teamMembers: TeamMember[] = [
   {
     "name": "Taufique Hossain",
     "role": "Cultural Co head",
-    "image": "/team/39.jpg",
+    "image": "/team/40.jpg",
     "instagram": "",
     "twitter": "",
     "facebook": "",
@@ -316,7 +316,7 @@ export const teamMembers: TeamMember[] = [
     "linkedin": ""
   },
   {
-    "name": "Arijit Ghoshal",
+    "name": "Arijit Ghosal",
     "role": "PR Vice Head",
     "image": "/team/38.jpg",
     "instagram": "",
