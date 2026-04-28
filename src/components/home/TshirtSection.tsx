@@ -10,6 +10,7 @@ const TshirtSection = () => {
     const y = useMotionValue(0)
     const [enableTilt, setEnableTilt] = useState(false)
     const [showComingSoon, setShowComingSoon] = useState(false)
+    const orderFormUrl = 'https://forms.gle/hVGQ9kTMBmiVSrn49'
 
     // Slight 3D rotation based on mouse position
     const rotateX = useTransform(y, [-100, 100], [10, -10])
@@ -157,17 +158,20 @@ const TshirtSection = () => {
                                 <span className="text-accent/40 line-through text-[10px] md:text-xs font-kodeMono">299</span>
                             </div>
 
-                            <motion.button
+                            <motion.a
+                                href={orderFormUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleOrderNow}
                                 className="w-full h-12 md:h-14 bg-fest-pink/10 hover:bg-fest-pink/20 border border-fest-pink text-fest-pink font-outfit font-bold text-[10px] md:text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2 group shadow-[0_0_15px_rgba(227,74,123,0.15)] hover:shadow-[0_0_25px_rgba(227,74,123,0.3)] backdrop-blur-sm"
                             >
-                                {showComingSoon ? "Coming Soon!" : "Order Now"}
+                                {showComingSoon ? "Opening Form..." : "Buy Now"}
                                 {!showComingSoon && (
                                     <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 )}
-                            </motion.button>
+                            </motion.a>
                         </div>
                     </div>
 
