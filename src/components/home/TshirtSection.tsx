@@ -10,7 +10,7 @@ const TshirtSection = () => {
     const y = useMotionValue(0)
     const [enableTilt, setEnableTilt] = useState(false)
     const [showComingSoon, setShowComingSoon] = useState(false)
-    const orderFormUrl = 'https://forms.gle/hVGQ9kTMBmiVSrn49'
+    const orderFormUrl = 'https://forms.gle/no3sCp2enybqiAWNA'
 
     // Slight 3D rotation based on mouse position
     const rotateX = useTransform(y, [-100, 100], [10, -10])
